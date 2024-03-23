@@ -7,7 +7,7 @@ pipeline {
     stages {
         stage('Build Maven') {
             steps {
-                checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/achrafGuedad/ci-cd/tree/main']]])
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/guedadAchraf/ci-cd/tree/main']]])
                 sh 'mvn clean install'
             }
         }
@@ -21,8 +21,8 @@ pipeline {
         stage('Push Image to Hub') {
             steps {
                 script {
-                    withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpwd')]) {
-                        sh 'docker login -u javatechie -p ${dockerhubpwd}'
+                    withCredentials([string(credentialsId: 'id-secret-text-dockerhub', variable: 'var-docker-hub')]) {
+}                        sh 'docker login -u guedadAchraf -p ${var-docker-hub}'
                     }
                     sh 'docker push javatechie/devops-integration'
                 }
