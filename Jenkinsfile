@@ -22,7 +22,7 @@ pipeline {
             steps {
                 script {
                     withCredentials([string(credentialsId: 'id-secret-text-dockerhub', variable: 'var-docker-hub')]) {
-}                        sh 'docker login -u guedadAchraf -p ${var-docker-hub}'
+}                        sh 'docker login -u guedadachraf -p ${var-docker-hub}'
                     }
                     sh 'docker push javatechie/devops-integration'
                 }
