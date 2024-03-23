@@ -26,7 +26,7 @@ pipeline {
                     // Set your Docker Hub password directly
                     def dockerhubPassword = 'SbiqSbiq123456'
                     sh "docker login -u guedadachraf -p ${dockerhubPassword}"
-                    sh 'docker push guedadachraf/repo-cicd'
+                    sh 'docker push guedadachraf/repo-cicd:javatechie/devops-integration'
                 }
             }
         }
