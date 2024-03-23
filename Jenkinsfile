@@ -23,7 +23,7 @@ pipeline {
         stage('Push Image to Hub') {
             steps {
                 script {
-                    withCredentials([string(credentialsId: 'id-secret-text-dockerhub', variable: 'DOCKERHUB_PASSWORD')]) {
+                    withCredentials([string(credentialsId: 'id-secret-github', variable: 'DOCKERHUB_PASSWORD')]) {
                         sh "docker login -u guedadachraf -p ${DOCKERHUB_PASSWORD}"
                         sh 'docker push javatechie/devops-integration'
                     }
