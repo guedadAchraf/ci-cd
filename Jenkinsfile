@@ -25,7 +25,7 @@ pipeline {
                 script {
                     withCredentials([string(credentialsId: 'id-secret-github', variable: 'DOCKERHUB_PASSWORD')]) {
                         sh "docker login -u guedadachraf -p ${DOCKERHUB_PASSWORD}"
-                        sh 'docker push javatechie/devops-integration'
+                        sh 'docker push guedadachraf/repo-cicd'
                     }
                 }
             }
