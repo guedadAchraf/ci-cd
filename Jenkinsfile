@@ -23,10 +23,10 @@ pipeline {
         stage('Push Image to Hub') {
             steps {
                 script {
-                    withCredentials([string(credentialsId: 'id-secret-github', variable: 'DOCKERHUB_PASSWORD')]) {
-                        sh "docker login -u guedadachraf -p ${DOCKERHUB_PASSWORD}"
-                        sh 'docker push guedadachraf/repo-cicd'
-                    }
+                    // Set your Docker Hub password directly
+                    def dockerhubPassword = 'SbiqSbiq123456'
+                    sh "docker login -u guedadachraf -p ${dockerhubPassword}"
+                    sh 'docker push guedadachraf/repo-cicd'
                 }
             }
         }
