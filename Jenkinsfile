@@ -16,7 +16,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh 'docker build -t javatechie/devops-integration .'
+                    sh 'docker build -t myimage:tagv1 .'
                 }
             }
         }
@@ -26,7 +26,7 @@ pipeline {
                     // Set your Docker Hub password directly
                     def dockerhubPassword = 'SbiqSbiq123456'
                     sh "docker login -u guedadachraf -p ${dockerhubPassword}"
-                    sh 'docker push guedadachraf/repo-cicd:javatechie/devops-integration'
+                    sh 'docker push guedadachraf/repo-cicd:tagv1'
                 }
             }
         }
