@@ -3,7 +3,7 @@ pipeline {
     environment {
         MAVEN_HOME = tool 'Maven_3.9.6'
         PATH = "$MAVEN_HOME/bin:$PATH"
-        DOCKER_PATH = "/usr/bin/docker"  // Specify the path to the Docker binary
+        DOCKER_PATH =  "/usr/bin:$PATH"// Specify the path to the Docker binary
     }
     stages {
         stage('Build Maven') {
