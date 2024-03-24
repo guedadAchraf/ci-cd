@@ -31,7 +31,7 @@ pipeline {
             steps {
                 script {
                     // Set your Docker Hub password directly
-                    sh 'docker login -u guedad.achraf@gmail.com -p SbiqSbiq123456'
+                    sh 'docker login -u guedadachraf -p SbiqSbiq123456'
                     sh 'docker push guedadachraf/repo-cicd'
                 }
             }
