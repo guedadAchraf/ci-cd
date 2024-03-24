@@ -3,6 +3,7 @@ pipeline {
     environment {
         MAVEN_HOME = tool 'Maven_3.9.6'
         PATH = "$MAVEN_HOME/bin:$PATH"
+        DOCKER_PATH = "/usr/bin/docker"  // Specify the path to the Docker binary
     }
     stages {
         stage('Build Maven') {
@@ -12,27 +13,22 @@ pipeline {
             }
         }
 
-
-     stage('Docker Build and Tag') {
-               steps {
-
-                    sh 'docker build -t nginxtest:latest .'
-                      sh 'docker tag nginxtest nikhilnidhi/nginxtest:latest'
-                    sh 'docker tag nginxtest nikhilnidhi/nginxtest:$BUILD_NUMBER'
-
-              }
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    sh "${DOCKER_PATH} build -t myimage ."
+                }
             }
+        }
 
-      stage('Publish image to Docker Hub') {
-
-                steps {
-            withDockerRegistry([ credentialsId: "dockerHub", url: "" ]) {
-              sh  'docker push nikhilnidhi/nginxtest:latest'
-              sh  'docker push nikhilnidhi/nginxtest:$BUILD_NUMBER'
+        stage('Push Image to Hub') {
+            steps {
+                script {
+                    // Set your Docker Hub password directly
+                    sh "${DOCKER_PATH} login -u guedadachraf -p SbiqSbiq123456"
+                    sh "${DOCKER_PATH} push guedadachraf/repo-cicd"
+                }
             }
-
-              }
-            }
-
+        }
     }
 }
