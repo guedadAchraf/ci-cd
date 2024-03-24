@@ -3,9 +3,9 @@ pipeline {
     environment {
         MAVEN_HOME = tool 'Maven_3.9.6'
         PATH = "$MAVEN_HOME/bin:$PATH"
-      imagename = "yenigul/hacicenkins"
-     registryCredential = 'dockerHub'
-     dockerImage = ' '
+        imagename = "yenigul/hacicenkins"
+        registryCredential = 'dockerHub'
+        dockerImage = ''
     }
     stages {
         stage('Build Maven') {
@@ -14,23 +14,22 @@ pipeline {
                 sh 'mvn clean install'
             }
         }
- stage('Building image') {
-      steps{
-        script {
-          dockerImage = docker.build imagename
+        stage('Building image') {
+            steps {
+                script {
+                    dockerImage = docker.build(imagename)
+                }
+            }
         }
-      }
-    }
-    stage('Deploy Image') {
-      steps{
-        script {
-          docker.withRegistry( '', registryCredential ) {
-            dockerImage.push("$BUILD_NUMBER")
-             dockerImage.push('latest')
-
-          }
+        stage('Deploy Image') {
+            steps {
+                script {
+                    docker.withRegistry('', registryCredential) {
+                        dockerImage.push("$BUILD_NUMBER")
+                        dockerImage.push('latest')
+                    }
+                }
+            }
         }
-      }
-    }
     }
 }
