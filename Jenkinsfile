@@ -13,21 +13,26 @@ pipeline {
         }
 
 
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    sh 'docker build -t myimage .'
-                }
+     stage('Docker Build and Tag') {
+               steps {
+
+                    sh 'docker build -t nginxtest:latest .'
+                      sh 'docker tag nginxtest nikhilnidhi/nginxtest:latest'
+                    sh 'docker tag nginxtest nikhilnidhi/nginxtest:$BUILD_NUMBER'
+
+              }
             }
-        }
-        stage('Push Image to Hub') {
-            steps {
-                script {
-                    // Set your Docker Hub password directly
-                    sh 'docker login -u guedadachraf -p SbiqSbiq123456'
-                    sh 'docker push guedadachraf/repo-cicd'
-                }
+
+      stage('Publish image to Docker Hub') {
+
+                steps {
+            withDockerRegistry([ credentialsId: "dockerHub", url: "" ]) {
+              sh  'docker push nikhilnidhi/nginxtest:latest'
+              sh  'docker push nikhilnidhi/nginxtest:$BUILD_NUMBER'
             }
-        }
+
+              }
+            }
+
     }
 }
