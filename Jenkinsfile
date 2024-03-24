@@ -23,7 +23,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh 'docker build -t myimage:tagv1 .'
+                    sh 'docker build -t myimage .'
                 }
             }
         }
@@ -32,7 +32,7 @@ pipeline {
                 script {
                     // Set your Docker Hub password directly
                     sh 'docker login -u guedadachraf -p SbiqSbiq123456'
-                    sh 'docker push guedadachraf/repo-cicd:tagv1'
+                    sh 'docker push guedadachraf/repo-cicd'
                 }
             }
         }
