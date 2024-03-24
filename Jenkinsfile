@@ -1,35 +1,46 @@
-pipeline {
-    agent any
-    environment {
-        MAVEN_HOME = tool 'Maven_3.9.6'
-        PATH = "$MAVEN_HOME/bin:$PATH"
-        imagename = "yenigul/hacicenkins"
-        registryCredential = 'dockerHub'
-        dockerImage = ''
-    }
-    stages {
-        stage('Build Maven') {
-            steps {
-                checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/guedadAchraf/ci-cd.git']]])
-                sh 'mvn clean install'
-            }
-        }
-        stage('Building image') {
-            steps {
-                script {
-                    dockerImage = docker.build(imagename)
-                }
-            }
-        }
-        stage('Deploy Image') {
-            steps {
-                script {
-                    docker.withRegistry('', registryCredential) {
-                        dockerImage.push("$BUILD_NUMBER")
-                        dockerImage.push('latest')
-                    }
-                }
-            }
-        }
-    }
+pipeline{
+
+	agent {label 'linux'}
+
+	environment {
+		DOCKERHUB_CREDENTIALS=credentials('dockerHub')
+	}
+
+	stages {
+
+	    stage('gitclone') {
+
+			steps {
+				git 'https://github.com/guedadAchraf/ci-cd.git'
+			}
+		}
+
+		stage('Build') {
+
+			steps {
+				sh 'docker build -t thetips4you/nodeapp_test:latest .'
+			}
+		}
+
+		stage('Login') {
+
+			steps {
+				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+			}
+		}
+
+		stage('Push') {
+
+			steps {
+				sh 'docker push thetips4you/nodeapp_test:latest'
+			}
+		}
+	}
+
+	post {
+		always {
+			sh 'docker logout'
+		}
+	}
+
 }
