@@ -8,12 +8,12 @@ pipeline{
 
 	stages {
 
-	    stage('gitclone') {
-
-			steps {
-				git 'https://github.com/guedadAchraf/ci-cd.git'
-			}
-		}
+	    stage('Build Maven') {
+                   steps {
+                       checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/guedadAchraf/ci-cd.git']]])
+                       sh 'mvn clean install'
+                   }
+               }
 
 		stage('Build') {
 
@@ -32,7 +32,7 @@ pipeline{
 		stage('Push') {
 
 			steps {
-				sh 'docker push thetips4you/nodeapp_test:latest'
+				sh 'docker push guedadachraf/repo-cicd:latest'
 			}
 		}
 	}
