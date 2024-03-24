@@ -3,7 +3,9 @@ pipeline {
     environment {
         MAVEN_HOME = tool 'Maven_3.9.6'
         PATH = "$MAVEN_HOME/bin:$PATH"
-        DOCKER_PATH =  "/usr/bin:$PATH"// Specify the path to the Docker binary
+      imagename = "yenigul/hacicenkins"
+     registryCredential = 'dockerHub'
+     dockerImage = ' '
     }
     stages {
         stage('Build Maven') {
@@ -12,23 +14,23 @@ pipeline {
                 sh 'mvn clean install'
             }
         }
-
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    sh "${DOCKER_PATH} build -t myimage ."
-                }
-            }
+ stage('Building image') {
+      steps{
+        script {
+          dockerImage = docker.build imagename
         }
+      }
+    }
+    stage('Deploy Image') {
+      steps{
+        script {
+          docker.withRegistry( '', registryCredential ) {
+            dockerImage.push("$BUILD_NUMBER")
+             dockerImage.push('latest')
 
-        stage('Push Image to Hub') {
-            steps {
-                script {
-                    // Set your Docker Hub password directly
-                    sh "${DOCKER_PATH} login -u guedadachraf -p SbiqSbiq123456"
-                    sh "${DOCKER_PATH} push guedadachraf/repo-cicd"
-                }
-            }
+          }
         }
+      }
+    }
     }
 }
